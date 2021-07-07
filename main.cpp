@@ -1,6 +1,49 @@
 #include <iostream>
 #include <map>
 
+/**
+ * @function Call next patient and remove him from registration book.
+ * @param registrationBook Map with all patient names.
+ */
+void callNext(std::map<std::string, int>& registrationBook)
+{
+    std::map<std::string, int>::iterator it = registrationBook.begin();
+    if (!registrationBook.empty())
+    {
+        std::cout << it->first << "\n";
+        if (it->second > 1)
+        {
+            it->second--;
+        }
+        else
+        {
+            registrationBook.erase(it);
+        }
+    }
+    else
+    {
+        std::cerr << "Registration book is empty. Add some patients.\n";
+    }
+}
+
+/**
+ * @function Register new patient in registration book.
+ * @param [in] registrationBook Map of all patient names.
+ * @param [in] name of patient to be registered in registration book.
+ */
+void registerPatient(std::map<std::string, int>& registrationBook, std::string& name)
+{
+    std::map<std::string, int>::iterator it = registrationBook.find(name);
+    if (it != registrationBook.end())
+    {
+        it->second++;
+    }
+    else
+    {
+        registrationBook.insert(std::make_pair(name, 1));
+    }
+}
+
 int main() {
     std::map<std::string, int> registration;
     do
@@ -11,24 +54,7 @@ int main() {
 
         if (surname == "next")
         {
-            std::map<std::string, int>::iterator it = registration.begin();
-            if (!registration.empty())
-            {
-                std::cout << it->first << "\n";
-                if (it->second > 1)
-                {
-                    it->second--;
-                }
-                else
-                {
-                    registration.erase(it);
-                }
-            }
-            else
-            {
-                std::cerr << "Registration book is empty. Add some patients.\n";
-            }
-
+            callNext(registration);
         }
         else if (surname == "exit")
         {
@@ -40,15 +66,7 @@ int main() {
         }
         else
         {
-            std::map<std::string, int>::iterator it = registration.find(surname);
-            if (it != registration.end())
-            {
-                it->second++;
-            }
-            else
-            {
-                registration.insert(std::make_pair(surname, 1));
-            }
+            registerPatient(registration, surname);
         }
     } while (true);
 
